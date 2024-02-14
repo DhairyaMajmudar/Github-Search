@@ -1,8 +1,6 @@
 import Body from "./components/Body";
 import Header from "./components/Header";
-
-import { useSelector } from "react-redux";
-import { selectUserName } from "./redux/slice/userSlice";
+import { useState, useEffect } from "react";
 
 // Fetching Github GraphQl API
 import {
@@ -33,37 +31,40 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const defaultName = "DhairyaMajmudar";
-const userName = JSON.stringify(defaultName) || "DhairyaMajmudar";
-
 const { data } = await client.query({
   query: gql`
-      {
-        user(login: ${userName}) {
-          avatarUrl
-          company
-          websiteUrl
-          name
-          twitterUsername
-          bio
-          pullRequests {
-            totalCount
-          }
-          followers {
-            totalCount
-          }
-          following {
-            totalCount
-          }
+    {
+      user(login: "DhairyaMajmudar") {
+        avatarUrl
+        company
+        websiteUrl
+        name
+        twitterUsername
+        bio
+        pullRequests {
+          totalCount
+        }
+        followers {
+          totalCount
+        }
+        following {
+          totalCount
         }
       }
-    `,
+    }
+  `,
 });
 
 const { user } = data;
 
 export default function Home() {
-  const userName = useSelector(selectUserName);
+  const [parentProp, setParentProp] = useState("");
+
+  useEffect(() => {
+    const initialPropValue = localStorage.getItem("userName");
+    setParentProp(initialPropValue || "");
+    console.log(parentProp);
+  }, [parentProp]);
 
   return (
     <ApolloProvider client={client}>

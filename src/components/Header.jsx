@@ -1,15 +1,14 @@
 import { FaSearch } from "react-icons/fa";
-
-import { useSelector, useDispatch } from "react-redux";
-import { setUserName, selectUserName } from "../redux/slice/userSlice";
+import { useState } from "react";
 
 const Header = () => {
-  const dispatch = useDispatch();
-  const userName = useSelector(selectUserName);
+  const [userName, setUserName] = useState("");
 
   const handleSearch = () => {
-    dispatch(userName);
+    localStorage.setItem("userName", userName);
     console.log(userName);
+
+    // updateParentProp();
   };
 
   return (
